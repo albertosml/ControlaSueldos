@@ -1,4 +1,4 @@
-# ControlaSueldos_Ejecutable
+# ControlaSueldos
 
 Aquí presento el código fuente de una aplicación Java que registra los días que ha trabajado un empleado dado el nombre (y el identificador) del trabajador y el número de horas trabajadas, por lo que a parte de añadir y modificar trabajador, también podemos:
 
