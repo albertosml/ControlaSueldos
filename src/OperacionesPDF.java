@@ -19,16 +19,11 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.PushbuttonField;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -129,8 +124,6 @@ public class OperacionesPDF {
 
             String horas_totales = Integer.toString(6*fechas.size());
 
-            PushbuttonField ad;
-
             PdfContentByte over = stamper.getOverContent(1);
 
             // Relleno fechas
@@ -141,16 +134,18 @@ public class OperacionesPDF {
                 form.setField("hsalidat" + fecha, "18H");
                 form.setField("htrabajadas" + fecha, "6H");
 
-                //Item item = form.getFieldItem("firma" + fecha);
-                Item item = form.getFieldItem("firma" + fecha);
-                PdfDictionary widget = item.getWidget(0);
-                PdfArray rect = widget.getAsArray(PdfName.RECT);
+                byte [] foto = (byte[]) a.get(3);
+                if(foto != null) {
+                    Item item = form.getFieldItem("firma" + fecha);
+                    PdfDictionary widget = item.getWidget(0);
+                    PdfArray rect = widget.getAsArray(PdfName.RECT);
 
-                Image image = Image.getInstance((byte[]) a.get(3));
-                image.setAbsolutePosition(rect.getAsNumber(0).floatValue() + 30.0f, 
-                        rect.getAsNumber(1).floatValue() - 0.2f);
-                image.scalePercent(17,5.5f);
-                over.addImage(image);
+                    Image image = Image.getInstance(foto);
+                    image.setAbsolutePosition(rect.getAsNumber(0).floatValue() + 30.0f, 
+                            rect.getAsNumber(1).floatValue() - 0.2f);
+                    image.scalePercent(17,5.5f);
+                    over.addImage(image);
+                }
             }
 
             form.setField("htrabajadastotal", horas_totales + "H");
