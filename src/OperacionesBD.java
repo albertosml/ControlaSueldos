@@ -290,14 +290,15 @@ public class OperacionesBD {
         }
     }
     
-    public boolean checkSueldo(int mes,int anio) throws ClassNotFoundException{
-        String sql = "SELECT * FROM Sueldo WHERE mes=? and anio=?";
+    public boolean checkSueldo(int mes,int anio,String id) throws ClassNotFoundException{
+        String sql = "SELECT * FROM Sueldo WHERE mes=? and anio=? and idTrabajador=?";
       
         try {
             Connection conn = this.conectar();
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, meses[mes]);
             stmt.setInt(2, anio);
+            stmt.setString(3, id);
             ResultSet rs = stmt.executeQuery();
             
             this.desconectar(conn);
@@ -310,8 +311,6 @@ public class OperacionesBD {
     }
     
     public ArrayList<String> calculateSueldo(int mes, int anio) throws ClassNotFoundException, SQLException {
-        boolean calculado = this.checkSueldo(mes, anio);
-        
         ArrayList<String> a = new ArrayList<>();
         
         String sql = "SELECT id,nombre,preciohora FROM Trabajador where activo=1;";
@@ -338,6 +337,8 @@ public class OperacionesBD {
                 
                 DecimalFormat df = new DecimalFormat("#.##");
                 df.setRoundingMode(RoundingMode.HALF_UP);
+                
+                boolean calculado = this.checkSueldo(mes, anio, rs.getString("id"));
                 
                 if(calculado) {
                     sql = "UPDATE Sueldo SET precio=?,horastrabajadasmensuales=? WHERE idTrabajador=? and mes=? and anio=?";
@@ -379,8 +380,6 @@ public class OperacionesBD {
     }
     
     public void calculateSueldo(int mes, int anio, Connection conn) throws ClassNotFoundException, SQLException {
-        boolean calculado = this.checkSueldo(mes, anio);
-           
         String sql = "SELECT id,nombre,preciohora FROM Trabajador where activo=1;";
         
         try {
@@ -402,7 +401,9 @@ public class OperacionesBD {
                 while(r.next()) horas_trabajadas += r.getInt("horastrabajadas");
 
                 Float sueldo = rs.getFloat("preciohora") * horas_trabajadas;
-
+                
+                boolean calculado = this.checkSueldo(mes, anio, rs.getString("id"));
+                
                 if(calculado) {
                     sql = "UPDATE Sueldo SET precio=?,horastrabajadasmensuales=? WHERE idTrabajador=? and mes=? and anio=?";
 
