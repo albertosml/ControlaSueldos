@@ -45,6 +45,7 @@ public class OperacionesPDF {
         
         try {
             ArrayList<String> a = o.calculateSueldo(mes, anio);
+            if(a.size() == 0) return "vacioerror"; 
             if(a.get(0) == "error") return "error";
             
             Document doc = new Document(PageSize.A4);

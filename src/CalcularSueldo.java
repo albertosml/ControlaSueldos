@@ -283,8 +283,17 @@ public class CalcularSueldo extends javax.swing.JFrame {
             String s = new String();
             try {
                 s = o.generatePDFSueldo(mes.getMonth(), anio.getYear(),ruta.getText());
-                if(s.contains("error")) JOptionPane.showMessageDialog(rootPane,"No está conectado a la base de datos");
-                else JOptionPane.showMessageDialog(rootPane,"Calculado el sueldo de los trabajadores con éxito");
+                switch (s) {
+                    case "error":
+                        JOptionPane.showMessageDialog(rootPane,"No está conectado a la base de datos");
+                        break;
+                    case "vacioerror":
+                        JOptionPane.showMessageDialog(rootPane,"No hay trabajadores para calcular el sueldo");
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(rootPane,"Calculado el sueldo de los trabajadores con éxito");
+                        break;
+                }
                 ruta.setText("");
             } catch (FileNotFoundException | DocumentException | ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(CalcularSueldo.class.getName()).log(Level.SEVERE, null, ex);
