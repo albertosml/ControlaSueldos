@@ -445,6 +445,9 @@ public class OperacionesBD {
         
         Vector<String> v;
         
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        
         try {
             Connection conn = this.conectar();
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -466,7 +469,6 @@ public class OperacionesBD {
                         ResultSet r = stmt.executeQuery();
 
                         if(r.next()) {
-                            DecimalFormat df = new DecimalFormat("#.##");
                             v.add(df.format(r.getFloat("precio")) + "€");
                             sueldos[i] += r.getFloat("precio");
                         }
@@ -480,7 +482,6 @@ public class OperacionesBD {
                         ResultSet r = stmt.executeQuery();
 
                         if(r.next()) {
-                            DecimalFormat df = new DecimalFormat("#.##");
                             v.add(df.format(r.getFloat("precio")) + "€");
                             sueldos[i] += r.getFloat("precio");
                         }
@@ -501,7 +502,6 @@ public class OperacionesBD {
                         ResultSet r = stmt.executeQuery();
 
                         if(r.next()) {
-                            DecimalFormat df = new DecimalFormat("#.##");
                             v.add(df.format(r.getFloat("precio")) + "€");
                             sueldos[i] += r.getFloat("precio");
                         }
@@ -515,7 +515,6 @@ public class OperacionesBD {
                         ResultSet r = stmt.executeQuery();
 
                         if(r.next()) {
-                            DecimalFormat df = new DecimalFormat("#.##");
                             v.add(df.format(r.getFloat("precio")) + "€");
                             sueldos[i] += r.getFloat("precio");
                         }
@@ -525,9 +524,6 @@ public class OperacionesBD {
                 
                 a.add(v);
             }
-            
-            DecimalFormat df = new DecimalFormat("#.##");
-            df.setRoundingMode(RoundingMode.HALF_UP);
             
             v = new Vector<>();
             Float acumulado = 0f;
