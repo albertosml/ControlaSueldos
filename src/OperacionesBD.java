@@ -209,8 +209,11 @@ public class OperacionesBD {
             
             PreparedStatement stmt = conn.prepareStatement(sentencia);
             if(opcion==4) {
-                byte[] bFile = Files.readAllBytes(Paths.get(elem));
-                stmt.setBytes(1, bFile);
+                if(!elem.isEmpty()) {
+                    byte[] bFile = Files.readAllBytes(Paths.get(elem));
+                    stmt.setBytes(1, bFile);
+                }
+                else stmt.setBytes(1, null);
             }
             else stmt.setString(1, elem);
             stmt.setString(2, id);
