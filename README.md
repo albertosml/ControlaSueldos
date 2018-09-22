@@ -9,3 +9,5 @@ Aquí presento el código fuente de una aplicación Java que registra los días 
 	- Ver las horas trabajadas cada día del mes por un determinado trabajador.
 
 IMPORTANTE: En el repositorio ControlaSueldos_Ejecutable está disponible los archivos necesarios para ejecutar el programa, es decir, el ".jar", la base de datos sqlite (aquí voy a poner el script que he usado para crear la base de datos, llamado "create_table.sql") y el pdf para rellenar el registro diario del trabajador.
+
+Nota: He añadido el archivo "firmas.pdf" para que los trabajadores inserten la firma en el papel, luego el usuario del programa escanea el documento y recorta cada cuadro para insertar las firmas en la base de datos.
