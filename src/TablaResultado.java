@@ -1,8 +1,11 @@
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -55,6 +58,7 @@ public class TablaResultado extends javax.swing.JFrame {
         table = new javax.swing.JTable();
         titulo = new javax.swing.JLabel();
         total = new javax.swing.JLabel();
+        btn_imprimir_pantalla = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -94,6 +98,13 @@ public class TablaResultado extends javax.swing.JFrame {
 
         total.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
 
+        btn_imprimir_pantalla.setText("Imprimir pantalla");
+        btn_imprimir_pantalla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_imprimir_pantallaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -107,21 +118,28 @@ public class TablaResultado extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 502, Short.MAX_VALUE)
                         .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(448, 448, 448))))
+                        .addGap(211, 211, 211)
+                        .addComponent(btn_imprimir_pantalla, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(451, 451, 451))
+                .addGap(453, 453, 453))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(btn_imprimir_pantalla, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(total, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -130,6 +148,34 @@ public class TablaResultado extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
     }//GEN-LAST:event_formWindowClosing
+
+    private void btn_imprimir_pantallaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_imprimir_pantallaActionPerformed
+        JFileChooser elector = new JFileChooser();
+        elector.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int r = elector.showOpenDialog(null);
+        boolean capturar = false;
+        if(r == JFileChooser.APPROVE_OPTION) capturar = true;
+        
+        if(capturar) {
+            // Duermo hebra para que el elector se cierre y no estorbe en la captura
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TablaResultado.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            Captura cap = new Captura();
+            try {
+                cap.capturarPantalla(elector.getSelectedFile().getAbsolutePath(),
+                        this.getLocation().x,this.getLocation().y,this.getWidth(),
+                        this.getHeight());
+                JOptionPane.showMessageDialog(rootPane,"Captura realizada con éxito.");
+            } catch (IOException ex) {
+                Logger.getLogger(TablaResultado.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(rootPane,"Problema al realizar la captura");
+            }
+        }
+    }//GEN-LAST:event_btn_imprimir_pantallaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -171,6 +217,7 @@ public class TablaResultado extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_imprimir_pantalla;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
     private javax.swing.JLabel titulo;
