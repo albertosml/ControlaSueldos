@@ -498,7 +498,8 @@ public class ModificarTrabajador extends javax.swing.JFrame {
             }
             JOptionPane.showMessageDialog(rootPane,"El cambio del precio por hora del trabajador se ha realizado con éxito");
         }
-        else JOptionPane.showMessageDialog(rootPane,"No se ha introducido el nuevo precio por hora del trabajador");
+        else JOptionPane.showMessageDialog(rootPane,"No se ha introducido el nuevo precio por hora del trabajador que debe "
+                + "escribir de la siguiente manera: por ejemplo, 135 ó 135.46");
     }//GEN-LAST:event_btn_modpreciohoraActionPerformed
 
     private void btn_activoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_activoActionPerformed

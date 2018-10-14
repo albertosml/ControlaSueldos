@@ -272,8 +272,11 @@ public class OperacionesBD {
     public String insertMovimiento(String id, int horas) throws ClassNotFoundException{
         Calendar c = Calendar.getInstance();
         
-        String sql = "INSERT INTO Movimiento VALUES (?,?,?,?,?);";
+        String sql = "INSERT INTO Movimiento VALUES (?,?,?,?,?,?);";
       
+        // Obtener precio/hora actual
+        ArrayList<Object> datos_trabajador = this.obtainTrabajador(id);
+        
         try {
             Connection conn = this.conectar();
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -282,6 +285,7 @@ public class OperacionesBD {
             stmt.setInt(3, c.get(Calendar.YEAR));
             stmt.setString(4, id);
             stmt.setInt(5, horas);
+            stmt.setFloat(6, (float) datos_trabajador.get(4));
             stmt.executeUpdate();
             
             this.desconectar(conn);
@@ -316,7 +320,7 @@ public class OperacionesBD {
     public ArrayList<String> calculateSueldo(int mes, int anio) throws ClassNotFoundException, SQLException {
         ArrayList<String> a = new ArrayList<>();
         
-        String sql = "SELECT id,nombre,preciohora FROM Trabajador where activo=1;";
+        String sql = "SELECT id,nombre FROM Trabajador where activo=1;";
            
         try {
             Connection conn = this.conectar();
@@ -324,7 +328,7 @@ public class OperacionesBD {
             ResultSet rs = stmt.executeQuery();
 
             while(rs.next()) {
-                sql = "SELECT dia,horastrabajadas FROM Movimiento where mes=? and anio=? and "
+                sql = "SELECT dia,horastrabajadas,preciohora FROM Movimiento where mes=? and anio=? and "
                             + "idTrabajador=?;";
                 stmt = conn.prepareStatement(sql);
                 stmt.setString(1, meses[mes]);
@@ -333,10 +337,12 @@ public class OperacionesBD {
                 ResultSet r = stmt.executeQuery();
 
                 int horas_trabajadas = 0;
-
-                while(r.next()) horas_trabajadas += r.getInt("horastrabajadas");
+                Float sueldo = 0f;
                 
-                Float sueldo = rs.getFloat("preciohora") * horas_trabajadas;
+                while(r.next()) {
+                    horas_trabajadas += r.getInt("horastrabajadas");
+                    sueldo += (r.getInt("horastrabajadas") * r.getFloat("preciohora"));
+                }
                 
                 DecimalFormat df = new DecimalFormat("#.##");
                 df.setRoundingMode(RoundingMode.HALF_UP);
@@ -383,7 +389,7 @@ public class OperacionesBD {
     }
     
     public void calculateSueldo(int mes, int anio, Connection conn) throws ClassNotFoundException, SQLException {
-        String sql = "SELECT id,nombre,preciohora FROM Trabajador where activo=1;";
+        String sql = "SELECT id,nombre FROM Trabajador where activo=1;";
         
         try {
             
@@ -391,7 +397,7 @@ public class OperacionesBD {
             ResultSet rs = stmt.executeQuery();
 
             while(rs.next()) {
-                sql = "SELECT dia,horastrabajadas FROM Movimiento where mes=? and "
+                sql = "SELECT dia,horastrabajadas,preciohora FROM Movimiento where mes=? and "
                         + "anio=? and idTrabajador=?;";
                 stmt = conn.prepareStatement(sql);
                 stmt.setString(1, meses[mes]);
@@ -400,10 +406,12 @@ public class OperacionesBD {
                 ResultSet r = stmt.executeQuery();
 
                 int horas_trabajadas = 0;
-
-                while(r.next()) horas_trabajadas += r.getInt("horastrabajadas");
-
-                Float sueldo = rs.getFloat("preciohora") * horas_trabajadas;
+                Float sueldo = 0f;
+                
+                while(r.next()) {
+                    horas_trabajadas += r.getInt("horastrabajadas");
+                    sueldo += (r.getInt("horastrabajadas") * r.getFloat("preciohora"));
+                }
                 
                 boolean calculado = this.checkSueldo(mes, anio, rs.getString("id"));
                 
