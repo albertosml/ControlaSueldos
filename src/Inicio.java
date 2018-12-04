@@ -68,7 +68,7 @@ public class Inicio extends javax.swing.JFrame {
             }
         }
         
-        SpinnerNumberModel numeros = new SpinnerNumberModel(1,1,24,1);
+        SpinnerNumberModel numeros = new SpinnerNumberModel(1,1,24,0.5);
         horas_trabajadas.setModel(numeros);
         
         ((JSpinner.DefaultEditor) horas_trabajadas.getEditor()).getTextField().setEditable(false);
@@ -103,6 +103,7 @@ public class Inicio extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        trabajadores.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         trabajadores.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 trabajadoresStateChanged(evt);
@@ -357,7 +358,7 @@ public class Inicio extends javax.swing.JFrame {
         else { // Se inserta el movimiento si no estaba seleccionado
             String s = new String();
             try {
-                s = o.insertMovimiento(v[0],(int) horas_trabajadas.getValue());
+                s = o.insertMovimiento(v[0],Float.parseFloat(horas_trabajadas.getValue().toString().replace(",", ".")));
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
             }

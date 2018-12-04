@@ -269,7 +269,7 @@ public class OperacionesBD {
         }
     }
     
-    public String insertMovimiento(String id, int horas) throws ClassNotFoundException{
+    public String insertMovimiento(String id, Float horas) throws ClassNotFoundException{
         Calendar c = Calendar.getInstance();
         
         String sql = "INSERT INTO Movimiento VALUES (?,?,?,?,?,?);";
@@ -284,7 +284,7 @@ public class OperacionesBD {
             stmt.setString(2, meses[c.get(Calendar.MONTH)]);
             stmt.setInt(3, c.get(Calendar.YEAR));
             stmt.setString(4, id);
-            stmt.setInt(5, horas);
+            stmt.setFloat(5, horas);
             stmt.setFloat(6, (float) datos_trabajador.get(4));
             stmt.executeUpdate();
             
@@ -336,12 +336,12 @@ public class OperacionesBD {
                 stmt.setString(3, rs.getString("id"));
                 ResultSet r = stmt.executeQuery();
 
-                int horas_trabajadas = 0;
+                Float horas_trabajadas = 0f;
                 Float sueldo = 0f;
                 
                 while(r.next()) {
-                    horas_trabajadas += r.getInt("horastrabajadas");
-                    sueldo += (r.getInt("horastrabajadas") * r.getFloat("preciohora"));
+                    horas_trabajadas += r.getFloat("horastrabajadas");
+                    sueldo += (r.getFloat("horastrabajadas") * r.getFloat("preciohora"));
                 }
                 
                 DecimalFormat df = new DecimalFormat("#.##");
@@ -354,7 +354,7 @@ public class OperacionesBD {
 
                     stmt = conn.prepareStatement(sql);
                     stmt.setFloat(1, sueldo);
-                    stmt.setInt(2, horas_trabajadas);
+                    stmt.setFloat(2, horas_trabajadas);
                     stmt.setString(3, rs.getString("id"));
                     stmt.setString(4, meses[mes]);
                     stmt.setInt(5, anio);
@@ -369,7 +369,7 @@ public class OperacionesBD {
                     stmt.setInt(2, anio);
                     stmt.setFloat(3, sueldo);
                     stmt.setString(4, rs.getString("id"));
-                    stmt.setInt(5, horas_trabajadas);
+                    stmt.setFloat(5, horas_trabajadas);
                     stmt.executeUpdate();
                 }
                     
@@ -405,12 +405,12 @@ public class OperacionesBD {
                 stmt.setString(3, rs.getString("id"));
                 ResultSet r = stmt.executeQuery();
 
-                int horas_trabajadas = 0;
+                Float horas_trabajadas = 0f;
                 Float sueldo = 0f;
                 
                 while(r.next()) {
-                    horas_trabajadas += r.getInt("horastrabajadas");
-                    sueldo += (r.getInt("horastrabajadas") * r.getFloat("preciohora"));
+                    horas_trabajadas += r.getFloat("horastrabajadas");
+                    sueldo += (r.getFloat("horastrabajadas") * r.getFloat("preciohora"));
                 }
                 
                 boolean calculado = this.checkSueldo(mes, anio, rs.getString("id"));
@@ -420,7 +420,7 @@ public class OperacionesBD {
 
                     stmt = conn.prepareStatement(sql);
                     stmt.setFloat(1, sueldo);
-                    stmt.setInt(2, horas_trabajadas);
+                    stmt.setFloat(2, horas_trabajadas);
                     stmt.setString(3, rs.getString("id"));
                     stmt.setString(4, meses[mes]);
                     stmt.setInt(5, anio);
@@ -435,7 +435,7 @@ public class OperacionesBD {
                     stmt.setInt(2, anio);
                     stmt.setFloat(3, sueldo);
                     stmt.setString(4, rs.getString("id"));
-                    stmt.setInt(5, horas_trabajadas);
+                    stmt.setFloat(5, horas_trabajadas);
                     stmt.executeUpdate();
                 }
             }

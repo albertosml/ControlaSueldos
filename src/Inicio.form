@@ -165,6 +165,11 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JSpinner" name="trabajadores">
+      <Properties>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Cursor Por defecto"/>
+        </Property>
+      </Properties>
       <Events>
         <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="trabajadoresStateChanged"/>
       </Events>
